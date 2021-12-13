@@ -1,0 +1,23 @@
+﻿  il2cpp-init.cpp
+  imgui.cpp
+C:\Users\caioc\Desktop\Projeto\imgui\imgui.cpp(1994,1): warning C4005: 'va_copy': redefinição de macro
+C:\Users\caioc\Desktop\Projeto\imgui\imgui.cpp(1992): message : consulte a definição anterior de 'va_copy'
+  imgui_demo.cpp
+  imgui_draw.cpp
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_demo.cpp(90,1): warning C4005: 'IM_NEWLINE': redefinição de macro
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_demo.cpp(88): message : consulte a definição anterior de 'IM_NEWLINE'
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_demo.cpp(4177,1): fatal error C1010: fim de arquivo inesperado durante procura por cabeçalho pré-compilado. Você esqueceu de adicionar '#include "pch-il2cpp.h"' à sua fonte?
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_draw.cpp(120,10): error C2006: '#include': esperava-se "NOME_DE_ARQUIVO" ou <FILENAME>
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_draw.cpp(143,10): error C2006: '#include': esperava-se "NOME_DE_ARQUIVO" ou <FILENAME>
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_draw.cpp(3182,1): fatal error C1010: fim de arquivo inesperado durante procura por cabeçalho pré-compilado. Você esqueceu de adicionar '#include "pch-il2cpp.h"' à sua fonte?
+C:\Users\caioc\Desktop\Projeto\imgui\imgui.cpp(9235,1): fatal error C1010: fim de arquivo inesperado durante procura por cabeçalho pré-compilado. Você esqueceu de adicionar '#include "pch-il2cpp.h"' à sua fonte?
+  imgui_impl_dx11.cpp
+  imgui_impl_win32.cpp
+  imgui_widgets.cpp
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_impl_dx11.cpp(513,1): fatal error C1010: fim de arquivo inesperado durante procura por cabeçalho pré-compilado. Você esqueceu de adicionar '#include "pch-il2cpp.h"' à sua fonte?
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_widgets.cpp(6551,1): fatal error C1010: fim de arquivo inesperado durante procura por cabeçalho pré-compilado. Você esqueceu de adicionar '#include "pch-il2cpp.h"' à sua fonte?
+  main.cpp
+  pch.cpp
+C:\Users\caioc\Desktop\Projeto\imgui\imgui_impl_win32.cpp(220,1): fatal error C1010: fim de arquivo inesperado durante procura por cabeçalho pré-compilado. Você esqueceu de adicionar '#include "pch-il2cpp.h"' à sua fonte?
+C:\Users\caioc\Desktop\Projeto\user\pch.cpp(6,1): fatal error C1010: fim de arquivo inesperado durante procura por cabeçalho pré-compilado. Você esqueceu de adicionar '#include "pch-il2cpp.h"' à sua fonte?
+C:\Users\caioc\Desktop\Projeto\user\pch.h(4,10): fatal error C1083: Não é possível abrir arquivo incluir: 'framework.h': No such file or directory (compilando arquivo de origem user\main.cpp)
