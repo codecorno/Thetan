@@ -1,1 +1,1 @@
-C:\Users\caioc\Desktop\Projeto\x64\Debug\IL2CppDLL.dll
+X:\Thetan\x64\Debug\IL2CppDLL.dll

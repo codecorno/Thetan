@@ -1,177 +1,142 @@
 // Generated C++ file by Il2CppInspector - http://www.djkaty.com - https://github.com/djkaty
 // Custom injected code entry point
 
-#include "pch.h"
 #include "pch-il2cpp.h"
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <iostream>
-#include "il2cpp-appdata.h"
+#include <fstream>
+#include <cstdlib>
+#include <iomanip>
+#include <unordered_set>
+#include <mutex>
 #include "helpers.h"
-#include "TypeDefs.h"
-#include "Macro.h"
+#include "detours.h"
+
+#include "D3D11.h"
+#include <D3Dcompiler.h>
+#include <winuser.h>
+
+#pragma comment (lib, "D3DCompiler.lib")
+#pragma comment (lib, "D3D11.lib")
+#pragma comment (lib, "winmm.lib")
+#pragma comment (lib, "user/detours.lib")
+
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_impl_win32.h"
+#include "../imgui/imgui_impl_dx11.h"
+#include "helpers.h"
 
 using namespace app;
 
-// Set the name of your log file here
 extern const LPCWSTR LOG_FILE = L"il2cpp-log.txt";
-
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 
-void WINAPI Init();
 bool WINAPI GetSwapChainVTable();
 void PrintRVA();
-void ConfigureGUIStyle();
-
-///////////////////////
-/// 윈도우 초기화
-///////////////////////
 
 HWND window = nullptr;
 WNDPROC originWndProcHandler = nullptr;
-
-///////////////////////
-/// 로컬 변수
-///////////////////////
-
 bool bShowMenu = false;
 bool bPresentInitialized = false;
-
-/// <summary>
-/// 새 스레드 생성
-/// </summary>
 bool bCreateThread = true;
-
-/// <summary>
-/// 콘솔 사용
-/// </summary>
 bool bUseConsole = true;
-
-/// <summary>
-/// 초기화 후 콘솔 닫기
-/// </summary>
 bool bCloseConsoleAfterInit = true;
-
-/// <summary>
-/// 찾은 Relative Virtual Address 출력
-/// </summary>
 bool bPrintRVA = true;
-
-/// <summary>
-/// 단축키
-/// </summary>
 UINT menuKey = VK_INSERT;
 
+bool noCountdown = false;
 
-///////////////////////
-/// D3D11 핸들
-///////////////////////
+
+
 ID3D11Device* pDevice;
 ID3D11DeviceContext* pDeviceContext;
 ID3D11RenderTargetView* pTargetRT;
 IDXGISwapChain* pSwapChain;
 
-///////////////////////
-/// Virtual Address Table
-///////////////////////
+
 
 DWORD_PTR* pDeviceContextVTable = nullptr;
 DWORD_PTR* pSwapChainVTable = nullptr;
 
-///////////////////////
-/// ImGui 폰트
-///////////////////////
-
 ImFont* m_default = nullptr;
 ImFont* g_font;
 ImFont* t_font;
-
-/// <summary>
-/// 스왑 체인 루프
-/// </summary>
 IDXGISwapChainPresent fnIDXGISwapChainPresent;
 HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags);
 
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
 
-// Custom injected code entry point
+DWORD64 GameAssembly = reinterpret_cast<DWORD64>(GetModuleHandleA("GameAssembly.dll"));
+DWORD64 NoCountdownAddr = GameAssembly + 0xB28CC6;
+HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetCurrentProcessId());
+LPVOID NoCountdownBackup;
+bool noCountdownRun;
+SIZE_T NoCountdownBytes;
+
+
+void noCountdownFunction() noexcept
+{	
+	if (!noCountdownRun)
+		return;
+
+	if (noCountdown)
+	{
+		unsigned char z[] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
+		ReadProcessMemory(hProcess, (LPVOID)NoCountdownAddr, NoCountdownBackup, sizeof(z), &NoCountdownBytes);
+		WriteProcessMemory(hProcess, (LPVOID)NoCountdownAddr, z, sizeof(z), NULL);
+		noCountdownRun = false;
+	}
+	else {
+		WriteProcessMemory(INVALID_HANDLE_VALUE, (LPVOID)NoCountdownAddr, NoCountdownBackup, NoCountdownBytes, NULL);
+		noCountdownRun = false;
+	}
+
+}
+
 void Run()
 {
-    // Initialize thread data - DO NOT REMOVE
-    il2cpp_thread_attach(il2cpp_domain_get());
-
-	bool result;
-
-	/// <summary>
-	/// 콘솔 설정
-	/// </summary>
-	/// <returns></returns>
-	if (bUseConsole)
-	{
-		result = Util::SetupConsole();
-		if (!result)
-		{
-			cout << "[-] Console already allocated!" << endl;
-		}
-		else
-		{
-			cout << "[+] Console alloced successfully." << endl;
-		}
-	}
-
-	/// <summary>
-	/// 스왑체인 가상 함수 테이블
-	/// </summary>
-	/// <returns></returns>
-	result = GetSwapChainVTable();
-	if (!result)
-	{
-		cout << "[-] Hooking virtual table failed!" << endl;
-		system("pause");
-		return;
-	}
-
-	/// <summary>
-	/// 후킹
-	/// </summary>
-	/// <returns></returns>
-	try
-	{
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
-		DetourTransactionCommit();
-	}
-	catch (int e)
-	{
-		cout << "[-] SwapChainPresent detour failed : " << e << endl;
-		return;
-	}
+    //il2cpp_thread_attach(il2cpp_domain_get());
+	GetSwapChainVTable();
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
+	DetourTransactionCommit();
 
 	SleepUntil(bPresentInitialized, 100)
 
-		if (bPrintRVA)
-		{
-			PrintRVA();
-		}
-
 	Sleep(100);
+}
 
-	if (bUseConsole && bCloseConsoleAfterInit)
+
+LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
+{
+	POINT mPos;
+
+	GetCursorPos(&mPos);
+	ScreenToClient(window, &mPos);
+
+	ImGui::GetIO().MousePos.x = (float)mPos.x;
+	ImGui::GetIO().MousePos.y = (float)mPos.y;
+
+	if (uMessage == WM_KEYUP)
 	{
-		result = Util::ReleaseConsole();
-		if (!result)
+		if (wParam == menuKey)
 		{
-			cout << "[-] Console deallocation failed!" << endl;
-			system("pause");
-			return;
+			bShowMenu = !bShowMenu;
 		}
 	}
 
-	cout << "[+] Successfully hooked!" << endl;
+	if (bShowMenu)
+	{
+		ImGui_ImplWin32_WndProcHandler(hwnd, uMessage, wParam, lParam);
+		return true;
+	}
+
+	return CallWindowProc(originWndProcHandler, hwnd, uMessage, wParam, lParam);
 }
 
 
@@ -228,7 +193,7 @@ bool WINAPI GetSwapChainVTable()
 
 	if (FAILED(result))
 	{
-		cout << "[-] D3D11CreateDeviceAndSwapChain failed!" << endl;
+		std::cout << "[-] D3D11CreateDeviceAndSwapChain failed!" << std::endl;
 		return false;
 	}
 
@@ -237,7 +202,7 @@ bool WINAPI GetSwapChainVTable()
 	pSwapChainVTable = (DWORD_PTR*)pSwapChainVTable[0];
 
 	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)(DWORD_PTR)pSwapChainVTable[SC_PRESENT];
-	cout << "[+] D3D11 present hooked!" << endl;
+	std::cout << "[+] D3D11 present hooked!" << std::endl;
 
 	if (bCreateThread)
 	{
@@ -246,6 +211,8 @@ bool WINAPI GetSwapChainVTable()
 
 	return true;
 }
+
+      
 
 HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags)
 {
@@ -266,28 +233,22 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 
 	ImGui::NewFrame();
 
-	const auto f = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings |
-		ImGuiWindowFlags_NoInputs;
 
 	ImGui::GetStyle().AntiAliasedFill = true;
 	ImGui::GetStyle().AntiAliasedLines = true;
 
+	noCountdownFunction();
 
 	if (bShowMenu)
 	{
 		bool bShow = true;
 
-		ImGui::Begin("Root", nullptr, f);
-
-		ImGui::PushFont(g_font);
-
-		ImGui::ShowDemoWindow(&bShow);
-
-		ImGui::PopFont();
+		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
+		if (ImGui::Checkbox("No Countdown", &noCountdown))
+			noCountdownRun = true;
 
 		ImGui::End();
 	}
-
 	ImGui::EndFrame();
 	ImGui::Render();
 
@@ -299,10 +260,10 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 
 void PrintRVA()
 {
-	cout << "[+] pDevice              :: 0x" << hex << pDevice << endl;
-	cout << "[+] pDeviceContext       :: 0x" << hex << pDeviceContext << endl;
-	cout << "[+] pDeviceContextVTable :: 0x" << hex << pDeviceContextVTable << endl;
-	cout << "[+] fnDXGISwapChainPres  :: 0x" << hex << fnIDXGISwapChainPresent << endl;
+	std::cout << "[+] pDevice              :: 0x" << std::hex << pDevice << std::endl;
+	std::cout << "[+] pDeviceContext       :: 0x" << std::hex << pDeviceContext << std::endl;
+	std::cout << "[+] pDeviceContextVTable :: 0x" << std::hex << pDeviceContextVTable << std::endl;
+	std::cout << "[+] fnDXGISwapChainPres  :: 0x" << std::hex << fnIDXGISwapChainPresent << std::endl;
 }
 
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags)
@@ -335,8 +296,6 @@ bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags)
 
 	ImGui::GetIO().ImeWindowHandle = window;
 
-	ConfigureGUIStyle();
-
 	ID3D11Texture2D* pBackBuffer;
 	pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
@@ -351,71 +310,3 @@ bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags)
 	return true;
 }
 
-void ConfigureGUIStyle()
-{
-	if (!m_default)
-	{
-		m_default = ImGui::GetIO().Fonts->AddFontDefault();
-	}
-
-	ImGuiStyle* style = &ImGui::GetStyle();
-
-	style->WindowPadding = ImVec2(15, 15);
-	style->WindowRounding = 5.0f;
-	style->FramePadding = ImVec2(5, 5);
-	style->FrameRounding = 4.0f;
-	style->ItemSpacing = ImVec2(12, 8);
-	style->ItemInnerSpacing = ImVec2(8, 6);
-	style->IndentSpacing = 25.0f;
-	style->ScrollbarSize = 15.0f;
-	style->ScrollbarRounding = 9.0f;
-	style->GrabMinSize = 5.0f;
-	style->GrabRounding = 3.0f;
-
-	style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
-	style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_ChildWindowBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
-	style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
-	style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
-	style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_CheckMark] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_Column] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ColumnHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-	style->Colors[ImGuiCol_ColumnActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	style->Colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-	style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-	style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-	style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-	style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
-	style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
-
-	ImGuiIO io = ImGui::GetIO();
-
-	io.Fonts->AddFontDefault();
-
-	g_font = io.Fonts->AddFontFromFileTTF((R"(C:\Windows\Fonts\Ruda-Regular.ttf)"), 16);
-	t_font = io.Fonts->AddFontFromFileTTF((R"(C:\Windows\Fonts\Ruda-Regular.ttf)"), 20);
-}

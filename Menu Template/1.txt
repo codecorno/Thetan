@@ -1,5 +1,0 @@
-GameAssembly.dll+B2DC16 - E8 751AE5FF           
-	- call Quantum.Frame.get_DeltaTime      
-		E8 ? ? ? ? 33 D2 48 8B CE FF C5 - \xE8\x00\x00\x00\x00\x33\xD2\x48\x8B\xCE\xFF\xC5, x????xxxxxxx
-		2823FE77234
-	

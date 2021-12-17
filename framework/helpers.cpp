@@ -48,3 +48,4 @@ std::string il2cppi_to_string(app::String* str) {
     return il2cppi_to_string(reinterpret_cast<Il2CppString*>(str));
 }
 #endif
+

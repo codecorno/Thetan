@@ -7,8 +7,14 @@
 #include <sstream>
 #include <iomanip>
 
-#include "il2cpp-metadata-version.h"
+//#include "il2cpp-metadata-version.h"
+#include "dxIndex.h"
+#include "D3D11.h"
+#include <D3Dcompiler.h>
 
+#pragma comment (lib, "D3DCompiler.lib")
+#pragma comment (lib, "D3D11.lib")
+/*/
 // Helper function to get the module base address
 uintptr_t il2cppi_get_base_address();
 
@@ -41,4 +47,41 @@ template<typename T> std::string to_hex_string(T i) {
     std::stringstream stream;
     stream << "0x" << std::setfill('0') << std::setw(sizeof(T) * 2) << std::hex << i;
     return stream.str();
+}
+*/
+
+typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags);
+typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pDeviceContext, UINT indexCount, UINT startIndexLocation, INT baseVertexLocation);
+#define SleepUntil(STATE, INTERVAL) while (!##STATE##) { Sleep(##INTERVAL##); }
+
+namespace Util
+{
+	inline bool SetupConsole()
+	{
+		const bool result = AllocConsole();
+
+		if (result)
+		{
+			FILE* pFile = nullptr;
+			freopen_s(&pFile, "CONOUT$", "w", stdout);
+			freopen_s(&pFile, "CONOUT$", "w", stderr);
+			freopen_s(&pFile, "CONIN$", "r", stdin);
+
+			SetConsoleTitle(L"DirectX 11 Hook");
+		}
+
+		return result;
+	}
+
+	inline bool ReleaseConsole()
+	{
+		const bool result = FreeConsole();
+
+		if (result)
+		{
+
+		}
+
+		return result;
+	}
 }
