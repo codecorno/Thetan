@@ -35,6 +35,9 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="user\custom.cpp" />
+    <ClCompile Include="user\functions.cpp" />
+    <ClCompile Include="user\menu.cpp" />
     <ClCompile Include="user\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +60,11 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="user\custom.h" />
+    <ClInclude Include="user\functions.h" />
+    <ClInclude Include="user\menu.h" />
     <ClInclude Include="user\main.h" />
+    <ClInclude Include="user\vars.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <!--<VCProjectVersion>16.0</VCProjectVersion>-->
