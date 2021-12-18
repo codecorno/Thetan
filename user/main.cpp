@@ -11,12 +11,12 @@
 #include <iomanip>
 #include <unordered_set>
 #include <mutex>
-#include "helpers.h"
 #include "detours.h"
 
 #include "D3D11.h"
 #include <D3Dcompiler.h>
 #include <winuser.h>
+#include "il2cpp-appdata.h"
 
 #pragma comment (lib, "D3DCompiler.lib")
 #pragma comment (lib, "D3D11.lib")
@@ -26,6 +26,7 @@
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../imgui/imgui_impl_dx11.h"
+#include "dxIndex.h"
 #include "helpers.h"
 
 using namespace app;
@@ -34,6 +35,9 @@ extern const LPCWSTR LOG_FILE = L"il2cpp-log.txt";
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
+typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags);
+typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pDeviceContext, UINT indexCount, UINT startIndexLocation, INT baseVertexLocation);
+#define SleepUntil(STATE, INTERVAL) while (!##STATE##) { Sleep(##INTERVAL##); }
 
 bool WINAPI GetSwapChainVTable();
 void PrintRVA();
@@ -66,40 +70,24 @@ ImFont* m_default = nullptr;
 ImFont* g_font;
 ImFont* t_font;
 IDXGISwapChainPresent fnIDXGISwapChainPresent;
-HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags);
+HRESULT __fastcall onPresent(IDXGISwapChain * _chain, UINT syncInterval, UINT flags) noexcept;
 
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
 
 DWORD64 GameAssembly = reinterpret_cast<DWORD64>(GetModuleHandleA("GameAssembly.dll"));
 DWORD64 NoCountdownAddr = GameAssembly + 0xB28CC6;
 HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetCurrentProcessId());
-LPVOID NoCountdownBackup;
-bool noCountdownRun;
-SIZE_T NoCountdownBytes;
 
 
 void noCountdownFunction() noexcept
 {	
-	if (!noCountdownRun)
-		return;
-
-	if (noCountdown)
-	{
-		unsigned char z[] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
-		ReadProcessMemory(hProcess, (LPVOID)NoCountdownAddr, NoCountdownBackup, sizeof(z), &NoCountdownBytes);
-		WriteProcessMemory(hProcess, (LPVOID)NoCountdownAddr, z, sizeof(z), NULL);
-		noCountdownRun = false;
-	}
-	else {
-		WriteProcessMemory(INVALID_HANDLE_VALUE, (LPVOID)NoCountdownAddr, NoCountdownBackup, NoCountdownBytes, NULL);
-		noCountdownRun = false;
-	}
-
+	unsigned char z[] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
+	WriteProcessMemory(hProcess, (LPVOID)NoCountdownAddr, z, sizeof(z), NULL);
 }
 
 void Run()
 {
-    //il2cpp_thread_attach(il2cpp_domain_get());
+    il2cpp_thread_attach(il2cpp_domain_get());
 	GetSwapChainVTable();
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
@@ -214,7 +202,7 @@ bool WINAPI GetSwapChainVTable()
 
       
 
-HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags)
+HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags) noexcept
 {
 	bool result;
 	if (!bPresentInitialized)
@@ -237,15 +225,31 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 	ImGui::GetStyle().AntiAliasedFill = true;
 	ImGui::GetStyle().AntiAliasedLines = true;
 
-	noCountdownFunction();
-
 	if (bShowMenu)
 	{
 		bool bShow = true;
 
 		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
-		if (ImGui::Checkbox("No Countdown", &noCountdown))
-			noCountdownRun = true;
+		if (ImGui::Button("No Countdown"))
+			noCountdownFunction();
+		
+		
+		if (ImGui::Button("Hmmmmmmmmmmm")) {
+			List_1_PlayerEntity_* a = CharacterView_GetListPlayerEntity(NULL);
+			auto b = a->fields._size;
+			auto c = *a->fields._items;
+			for (int i = 0, inc = 1; i < 100; ++inc, i += inc) {
+				if (c.vector[i] != nullptr) 
+					if(c.vector[i]->klass != nullptr)
+						if(c.vector[i]->fields.playerName != nullptr)
+							if(c.vector[i]->fields.playerName->klass != nullptr)
+								if(c.vector[i]->fields.playerName->fields.m_firstChar != NULL)
+									auto d = PlayerEntity_get_PlayerName(c.vector[i], NULL);
+				
+			}
+		}
+
+
 
 		ImGui::End();
 	}

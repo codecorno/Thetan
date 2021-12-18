@@ -25,12 +25,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="framework\helpers.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="framework\helpers.cpp" />
+    <ClCompile Include="framework\il2cpp-init.cpp" />
+    <ClCompile Include="framework\pch-il2cpp.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -41,8 +38,17 @@
     <ClCompile Include="user\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="appdata\il2cpp-api-functions-ptr.h" />
+    <ClInclude Include="appdata\il2cpp-api-functions.h" />
+    <ClInclude Include="appdata\il2cpp-functions.h" />
+    <ClInclude Include="appdata\il2cpp-metadata-version.h" />
+    <ClInclude Include="appdata\il2cpp-types-ptr.h" />
+    <ClInclude Include="appdata\il2cpp-types.h" />
     <ClInclude Include="framework\dxIndex.h" />
     <ClInclude Include="framework\helpers.h" />
+    <ClInclude Include="framework\il2cpp-appdata.h" />
+    <ClInclude Include="framework\il2cpp-init.h" />
+    <ClInclude Include="framework\pch-il2cpp.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
