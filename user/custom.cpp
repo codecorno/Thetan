@@ -1,6 +1,5 @@
 #include <Windows.h>
 #include "custom.h"
-#include "pch-il2cpp.h"
 
 app::ClientState__Enum Custom::GetClientState() noexcept{
     return app::PhotonNetwork_get_connectionStateDetailed(NULL);

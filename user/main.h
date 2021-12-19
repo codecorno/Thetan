@@ -1,4 +1,16 @@
 #pragma once
+#include "D3D11.h"
+#include <D3Dcompiler.h>
+#include <winuser.h>
+#include "vars.h"
+
+#pragma comment (lib, "D3DCompiler.lib")
+#pragma comment (lib, "D3D11.lib")
+#pragma comment (lib, "winmm.lib")
+#pragma comment (lib, "user/detours.lib")
+
+#include "dxIndex.h"
+#include "helpers.h"
 
 HWND window = nullptr;
 WNDPROC originWndProcHandler = nullptr;
@@ -22,14 +34,17 @@ DWORD_PTR* pSwapChainVTable = nullptr;
 ImFont* m_default = nullptr;
 ImFont* g_font;
 ImFont* t_font;
-IDXGISwapChainPresent fnIDXGISwapChainPresent;
-HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags) noexcept;
-
-bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags);
-typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pDeviceContext, UINT indexCount, UINT startIndexLocation, INT baseVertexLocation);
-#define SleepUntil(STATE, INTERVAL) while (!##STATE##) { Sleep(##INTERVAL##); }
+IDXGISwapChainPresent fnIDXGISwapChainPresent;
 
-void Run();
+
+namespace Main {
+
+	HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags) noexcept;
+
+	bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
+	LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
+	typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pDeviceContext, UINT indexCount, UINT startIndexLocation, INT baseVertexLocation);
+	void Run();
+}
+#define SleepUntil(STATE, INTERVAL) while (!##STATE##) { Sleep(##INTERVAL##); }

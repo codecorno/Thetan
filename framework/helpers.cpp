@@ -8,7 +8,6 @@
 #include <string>
 #include <codecvt>
 #include "helpers.h"
-#include "il2cpp-appdata.h"
 
 uintptr_t il2cppi_get_base_address() {
     return (uintptr_t)GetModuleHandleW(L"GameAssembly.dll");

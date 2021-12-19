@@ -4,7 +4,6 @@
 
 #include <Windows.h>
 #include "pch-il2cpp.h"
-#include "il2cpp-appdata.h"
 
 using namespace app;
 

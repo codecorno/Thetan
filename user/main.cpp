@@ -14,29 +14,18 @@
 #include "main.h"
 #include "detours.h"
 
-#include "D3D11.h"
-#include <D3Dcompiler.h>
-#include <winuser.h>
-#include "il2cpp-appdata.h"
-#include "vars.h"
-
-#pragma comment (lib, "D3DCompiler.lib")
-#pragma comment (lib, "D3D11.lib")
-#pragma comment (lib, "winmm.lib")
-#pragma comment (lib, "user/detours.lib")
-
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../imgui/imgui_impl_dx11.h"
-#include "dxIndex.h"
-#include "helpers.h"
 #include "menu.h"
 
 using namespace app;
 
 bool WINAPI GetSwapChainVTable();
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-void Run()
+
+void Main::Run()
 {
     il2cpp_thread_attach(il2cpp_domain_get());
 	GetSwapChainVTable();
@@ -149,7 +138,7 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 	bool result;
 	if (!bPresentInitialized)
 	{
-		result = InitializePresent(_chain, syncInterval, flags);
+		result = Main::InitializePresent(_chain, syncInterval, flags);
 		if (!result)
 		{
 			return fnIDXGISwapChainPresent(_chain, syncInterval, flags);
