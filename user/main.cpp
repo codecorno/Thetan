@@ -31,7 +31,6 @@
 
 using namespace app;
 
-extern const LPCWSTR LOG_FILE = L"il2cpp-log.txt";
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
@@ -40,7 +39,6 @@ typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pDeviceContext, 
 #define SleepUntil(STATE, INTERVAL) while (!##STATE##) { Sleep(##INTERVAL##); }
 
 bool WINAPI GetSwapChainVTable();
-void PrintRVA();
 
 HWND window = nullptr;
 WNDPROC originWndProcHandler = nullptr;
@@ -55,7 +53,6 @@ UINT menuKey = VK_INSERT;
 bool noCountdown = false;
 
 
-
 ID3D11Device* pDevice;
 ID3D11DeviceContext* pDeviceContext;
 ID3D11RenderTargetView* pTargetRT;
@@ -66,9 +63,6 @@ IDXGISwapChain* pSwapChain;
 DWORD_PTR* pDeviceContextVTable = nullptr;
 DWORD_PTR* pSwapChainVTable = nullptr;
 
-ImFont* m_default = nullptr;
-ImFont* g_font;
-ImFont* t_font;
 IDXGISwapChainPresent fnIDXGISwapChainPresent;
 HRESULT __fastcall onPresent(IDXGISwapChain * _chain, UINT syncInterval, UINT flags) noexcept;
 
@@ -77,13 +71,7 @@ bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
 DWORD64 GameAssembly = reinterpret_cast<DWORD64>(GetModuleHandleA("GameAssembly.dll"));
 DWORD64 NoCountdownAddr = GameAssembly + 0xB28CC6;
 HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetCurrentProcessId());
-
-
-void noCountdownFunction() noexcept
-{	
-	unsigned char z[] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
-	WriteProcessMemory(hProcess, (LPVOID)NoCountdownAddr, z, sizeof(z), NULL);
-}
+unsigned char fiveBytesNOP[] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
 
 void Run()
 {
@@ -180,22 +168,16 @@ bool WINAPI GetSwapChainVTable()
 		&swapChainDesc, &swapChain, &device, &supportedFeatureLevel, &deviceContext);
 
 	if (FAILED(result))
-	{
-		std::cout << "[-] D3D11CreateDeviceAndSwapChain failed!" << std::endl;
 		return false;
-	}
 
 
 	pSwapChainVTable = (DWORD_PTR*)swapChain;
 	pSwapChainVTable = (DWORD_PTR*)pSwapChainVTable[0];
 
 	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)(DWORD_PTR)pSwapChainVTable[SC_PRESENT];
-	std::cout << "[+] D3D11 present hooked!" << std::endl;
 
-	if (bCreateThread)
-	{
+	if (bCreateThread)	
 		Sleep(2000);
-	}
 
 	return true;
 }
@@ -231,22 +213,12 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 
 		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
 		if (ImGui::Button("No Countdown"))
-			noCountdownFunction();
+			WriteProcessMemory(hProcess, (LPVOID)fiveBytesNOP, fiveBytesNOP, sizeof(fiveBytesNOP), NULL);
 		
 		
 		if (ImGui::Button("Hmmmmmmmmmmm")) {
 			List_1_PlayerEntity_* a = CharacterView_GetListPlayerEntity(NULL);
-			auto b = a->fields._size;
-			auto c = *a->fields._items;
-			for (int i = 0, inc = 1; i < 100; ++inc, i += inc) {
-				if (c.vector[i] != nullptr) 
-					if(c.vector[i]->klass != nullptr)
-						if(c.vector[i]->fields.playerName != nullptr)
-							if(c.vector[i]->fields.playerName->klass != nullptr)
-								if(c.vector[i]->fields.playerName->fields.m_firstChar != NULL)
-									auto d = PlayerEntity_get_PlayerName(c.vector[i], NULL);
-				
-			}
+			
 		}
 
 
@@ -260,14 +232,6 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	return fnIDXGISwapChainPresent(_chain, syncInterval, flags);
-}
-
-void PrintRVA()
-{
-	std::cout << "[+] pDevice              :: 0x" << std::hex << pDevice << std::endl;
-	std::cout << "[+] pDeviceContext       :: 0x" << std::hex << pDeviceContext << std::endl;
-	std::cout << "[+] pDeviceContextVTable :: 0x" << std::hex << pDeviceContextVTable << std::endl;
-	std::cout << "[+] fnDXGISwapChainPres  :: 0x" << std::hex << fnIDXGISwapChainPresent << std::endl;
 }
 
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags)
