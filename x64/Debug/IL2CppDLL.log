@@ -1,2 +1,14 @@
-﻿  main.cpp
-  IL2CppDLL.vcxproj -> X:\Thetan\x64\Debug\IL2CppDLL.dll
+﻿  dllmain.cpp
+  helpers.cpp
+  il2cpp-init.cpp
+  pch-il2cpp.cpp
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_dx11.cpp
+  imgui_impl_win32.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  main.cpp
+  LINK : C:\Users\IMPLANTAÇÃO-3\Documents\GitHub\Thetan\x64\Debug\IL2CppDLL.dll não encontrado ou não compilado pelo o último link incremental; executando link completo
+LINK : fatal error LNK1104: não é possível abrir o arquivo 'user/detours.lib'
