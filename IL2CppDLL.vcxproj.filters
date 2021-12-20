@@ -99,6 +99,12 @@
     <ClInclude Include="framework\helpers.h">
       <Filter>framework</Filter>
     </ClInclude>
+    <ClInclude Include="framework\dllmain.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="user\vars.h">
+      <Filter>user</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="appdata">

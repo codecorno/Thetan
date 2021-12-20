@@ -1,7 +1,8 @@
 // Generated C++ file by Il2CppInspector - http://www.djkaty.com - https://github.com/djkaty
 // Custom injected code entry point
-
 #include "pch-il2cpp.h"
+#pragma comment (lib, "D3DCompiler.lib")
+#pragma comment (lib, "D3D11.lib")
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -11,67 +12,52 @@
 #include <iomanip>
 #include <unordered_set>
 #include <mutex>
-#include "detours.h"
-
-#include "D3D11.h"
+#include <D3D11.h>
 #include <D3Dcompiler.h>
 #include <winuser.h>
-//#include "main.h"
 
-#pragma comment (lib, "D3DCompiler.lib")
-#pragma comment (lib, "D3D11.lib")
-#pragma comment (lib, "winmm.lib")
-#pragma comment (lib, "user/detours.lib")
-
+#include "main.h"
+#include "helpers.h"
+#include "detours.h"
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../imgui/imgui_impl_dx11.h"
 #include "dxIndex.h"
-#include "helpers.h"
+#include "vars.h"
+
+#pragma comment (lib, "winmm.lib")
+#pragma comment (lib, "user/detours.lib")
 
 using namespace app;
-
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags);
 typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pDeviceContext, UINT indexCount, UINT startIndexLocation, INT baseVertexLocation);
-#define SleepUntil(STATE, INTERVAL) while (!##STATE##) { Sleep(##INTERVAL##); }
 
-bool WINAPI GetSwapChainVTable();
 
 HWND window = nullptr;
 WNDPROC originWndProcHandler = nullptr;
-bool bShowMenu = false;
 bool bPresentInitialized = false;
-bool bCreateThread = true;
-bool bUseConsole = true;
-bool bCloseConsoleAfterInit = true;
-bool bPrintRVA = true;
-UINT menuKey = VK_INSERT;
-
-bool noCountdown = false;
-
-
 ID3D11Device* pDevice;
 ID3D11DeviceContext* pDeviceContext;
 ID3D11RenderTargetView* pTargetRT;
 IDXGISwapChain* pSwapChain;
 
-
-
 DWORD_PTR* pDeviceContextVTable = nullptr;
 DWORD_PTR* pSwapChainVTable = nullptr;
 
 IDXGISwapChainPresent fnIDXGISwapChainPresent;
-HRESULT __fastcall onPresent(IDXGISwapChain * _chain, UINT syncInterval, UINT flags) noexcept;
+HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags) noexcept;
 
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
+bool WINAPI GetSwapChainVTable();
 
 DWORD64 GameAssembly = reinterpret_cast<DWORD64>(GetModuleHandleA("GameAssembly.dll"));
 DWORD64 NoCountdownAddr = GameAssembly + 0xB28CC6;
 HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetCurrentProcessId());
 unsigned char fiveBytesNOP[] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
+
 
 void Run()
 {
@@ -82,7 +68,9 @@ void Run()
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
 	DetourTransactionCommit();
 
-	SleepUntil(bPresentInitialized, 100)
+	while (!bPresentInitialized) {
+		Sleep(100); 
+	}
 
 	Sleep(100);
 }
@@ -100,13 +88,13 @@ LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam
 
 	if (uMessage == WM_KEYUP)
 	{
-		if (wParam == menuKey)
+		if (wParam == Vars::menuKey)
 		{
-			bShowMenu = !bShowMenu;
+			Vars::bShowMenu = !Vars::bShowMenu;
 		}
 	}
 
-	if (bShowMenu)
+	if (Vars::bShowMenu)
 	{
 		ImGui_ImplWin32_WndProcHandler(hwnd, uMessage, wParam, lParam);
 		return true;
@@ -176,8 +164,7 @@ bool WINAPI GetSwapChainVTable()
 
 	fnIDXGISwapChainPresent = (IDXGISwapChainPresent)(DWORD_PTR)pSwapChainVTable[SC_PRESENT];
 
-	if (bCreateThread)	
-		Sleep(2000);
+	Sleep(2000);
 
 	return true;
 }
@@ -207,9 +194,8 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 	ImGui::GetStyle().AntiAliasedFill = true;
 	ImGui::GetStyle().AntiAliasedLines = true;
 
-	if (bShowMenu)
+	if (Vars::bShowMenu)
 	{
-		bool bShow = true;
 
 		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
 		if (ImGui::Button("No Countdown"))

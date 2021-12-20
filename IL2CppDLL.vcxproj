@@ -44,6 +44,7 @@
     <ClInclude Include="appdata\il2cpp-metadata-version.h" />
     <ClInclude Include="appdata\il2cpp-types-ptr.h" />
     <ClInclude Include="appdata\il2cpp-types.h" />
+    <ClInclude Include="framework\dllmain.h" />
     <ClInclude Include="framework\dxIndex.h" />
     <ClInclude Include="framework\helpers.h" />
     <ClInclude Include="framework\il2cpp-appdata.h" />
@@ -58,6 +59,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="user\main.h" />
+    <ClInclude Include="user\vars.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <!--<VCProjectVersion>16.0</VCProjectVersion>-->
