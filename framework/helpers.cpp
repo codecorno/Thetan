@@ -8,7 +8,6 @@
 #include <string>
 #include <codecvt>
 #include "helpers.h"
-#include "il2cpp-appdata.h"
 
 uintptr_t il2cppi_get_base_address() {
     return (uintptr_t)GetModuleHandleW(L"GameAssembly.dll");
@@ -22,5 +21,3 @@ std::string il2cppi_to_string(Il2CppString* str) {
 std::string il2cppi_to_string(app::String* str) {
     return il2cppi_to_string(reinterpret_cast<Il2CppString*>(str));
 }
-
-

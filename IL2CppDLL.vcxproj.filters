@@ -37,15 +37,6 @@
     <ClCompile Include="framework\helpers.cpp">
       <Filter>framework</Filter>
     </ClCompile>
-    <ClCompile Include="user\menu.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="user\functions.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
-    <ClCompile Include="user\custom.cpp">
-      <Filter>user</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -107,18 +98,6 @@
     </ClInclude>
     <ClInclude Include="framework\helpers.h">
       <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="user\menu.h">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="user\functions.h">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="user\vars.h">
-      <Filter>user</Filter>
-    </ClInclude>
-    <ClInclude Include="user\custom.h">
-      <Filter>user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
