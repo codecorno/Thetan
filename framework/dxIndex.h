@@ -1,5 +1,20 @@
 #pragma once
 
+HWND window = nullptr;
+WNDPROC originWndProcHandler = nullptr;
+bool bPresentInitialized = false;
+ID3D11Device* pDevice;
+ID3D11DeviceContext* pDeviceContext;
+ID3D11RenderTargetView* pTargetRT;
+IDXGISwapChain* pSwapChain;
+DWORD_PTR* pDeviceContextVTable = nullptr;
+DWORD_PTR* pSwapChainVTable = nullptr;
+typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags);
+typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pDeviceContext, UINT indexCount, UINT startIndexLocation, INT baseVertexLocation);
+
+IDXGISwapChainPresent fnIDXGISwapChainPresent;
+HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags) noexcept;
+
 #ifndef DXGIINDEXES_H
 #define DXGIINDEXES_H
 

@@ -17,12 +17,12 @@
 #include <winuser.h>
 
 #include "main.h"
+#include "dxIndex.h"
 #include "helpers.h"
 #include "detours.h"
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../imgui/imgui_impl_dx11.h"
-#include "dxIndex.h"
 #include "vars.h"
 
 #pragma comment (lib, "winmm.lib")
@@ -31,27 +31,7 @@
 using namespace app;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
-typedef HRESULT(__fastcall* IDXGISwapChainPresent)(IDXGISwapChain* pSwapChain, UINT syncInterval, UINT flags);
-typedef void(__stdcall* ID3D11DrawIndexed)(ID3D11DeviceContext* pDeviceContext, UINT indexCount, UINT startIndexLocation, INT baseVertexLocation);
-
-
-HWND window = nullptr;
-WNDPROC originWndProcHandler = nullptr;
-bool bPresentInitialized = false;
-ID3D11Device* pDevice;
-ID3D11DeviceContext* pDeviceContext;
-ID3D11RenderTargetView* pTargetRT;
-IDXGISwapChain* pSwapChain;
-
-DWORD_PTR* pDeviceContextVTable = nullptr;
-DWORD_PTR* pSwapChainVTable = nullptr;
-
-IDXGISwapChainPresent fnIDXGISwapChainPresent;
-HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT flags) noexcept;
-
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
-bool WINAPI GetSwapChainVTable();
 
 DWORD64 GameAssembly = reinterpret_cast<DWORD64>(GetModuleHandleA("GameAssembly.dll"));
 DWORD64 NoCountdownAddr = GameAssembly + 0xB28CC6;
