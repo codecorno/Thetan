@@ -1,4 +1,4 @@
-// Generated C++ file by Il2CppInspector - http://www.djkaty.com - https://github.com/djkaty
+
 // Helper functions
 
 #pragma once
