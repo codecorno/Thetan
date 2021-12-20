@@ -16,7 +16,7 @@
 #include "D3D11.h"
 #include <D3Dcompiler.h>
 #include <winuser.h>
-#include "il2cpp-appdata.h"
+//#include "main.h"
 
 #pragma comment (lib, "D3DCompiler.lib")
 #pragma comment (lib, "D3D11.lib")
