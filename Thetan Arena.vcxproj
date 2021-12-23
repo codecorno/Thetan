@@ -65,7 +65,7 @@
     <!--<VCProjectVersion>16.0</VCProjectVersion>-->
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{625D6B4C-78B4-467A-AA73-27C5314169D0}</ProjectGuid>
-    <RootNamespace>Il2CppDLL</RootNamespace>
+    <RootNamespace>ThetanArena</RootNamespace>
     <!--<WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>-->
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
