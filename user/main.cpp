@@ -66,13 +66,13 @@ LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam
 
 	if (uMessage == WM_KEYUP)
 	{
-		if (wParam == Vars::menuKey)
+		if (wParam == vars.menuKey)
 		{
-			Vars::bShowMenu = !Vars::bShowMenu;
+			vars.bShowMenu = !vars.bShowMenu;
 		}
 	}
 
-	if (Vars::bShowMenu)
+	if (vars.bShowMenu)
 	{
 		ImGui_ImplWin32_WndProcHandler(hwnd, uMessage, wParam, lParam);
 		return true;
@@ -172,7 +172,7 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 	ImGui::GetStyle().AntiAliasedFill = true;
 	ImGui::GetStyle().AntiAliasedLines = true;
 
-	if (Vars::bShowMenu)
+	if (vars.bShowMenu)
 	{
 
 		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);

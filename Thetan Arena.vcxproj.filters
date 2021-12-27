@@ -37,6 +37,9 @@
     <ClCompile Include="framework\helpers.cpp">
       <Filter>framework</Filter>
     </ClCompile>
+    <ClCompile Include="user\vars.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">

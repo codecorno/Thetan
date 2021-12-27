@@ -1,8 +1,11 @@
 #pragma once
 #include <Windows.h>
 
-namespace Vars {
+class Vars {
+public:
 	bool noCountdown = false;
 	bool bShowMenu = false;
 	UINT menuKey = VK_INSERT;
 };
+
+extern Vars vars;
