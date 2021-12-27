@@ -2,7 +2,7 @@
 		2823FE77234
 		
 		
-"GameAssembly.dll"+B28CC6: Skill No Cooldown
+"GameAssembly.dll"+AB62D6: Skill No Cooldown
 "GameAssembly.dll"+51EF41: Enemies 0 Health
 
 
