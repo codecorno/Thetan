@@ -179,15 +179,12 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 
 		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
 		if (ImGui::Button("No Countdown"))
-			WriteProcessMemory(hProcess, (LPVOID)fiveBytesNOP, fiveBytesNOP, sizeof(fiveBytesNOP), NULL);
-		
+			WriteProcessMemory(hProcess, (LPVOID)fiveBytesNOP, fiveBytesNOP, sizeof(fiveBytesNOP), NULL);		
 		
 		if (ImGui::Button("Hmmmmmmmmmmm")) {
 			List_1_PlayerEntity_* a = CharacterView_GetListPlayerEntity(NULL);
 			
 		}
-
-
 
 		ImGui::End();
 	}
