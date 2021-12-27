@@ -53,6 +53,19 @@ void Run()
 	Sleep(100);
 }
 
+void DrawLines() {
+	if (!vars.drawLine)
+		return;
+
+	auto localPlayerPos = app::PlayerEntity_get_UIPos(vars.localPlayer, NULL);
+	app::Vector3 enemyPos;
+
+	for (int i = 0; i < vars.players.count; i++) {
+		enemyPos = app::PlayerEntity_get_UIPos(vars.players.allPlayers[i], NULL);
+		app::Debug_2_DrawLine_1(localPlayerPos, enemyPos, { 255,255,255,255 }, NULL);
+	};
+}
+
 
 LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -180,12 +193,8 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
 		if (ImGui::Button("No Countdown"))
 			WriteProcessMemory(hProcess, (LPVOID)fiveBytesNOP, fiveBytesNOP, sizeof(fiveBytesNOP), NULL);		
-		
-		if (ImGui::Button("Hmmmmmmmmmmm")) {
-			auto* a = CharacterView_GetListPlayerEntity(NULL)->fields._items->vector;
-			
-		}
 
+		ImGui::Checkbox("Draw Line", &vars.drawLine);
 		ImGui::End();
 	}
 	ImGui::EndFrame();
