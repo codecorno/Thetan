@@ -32,7 +32,7 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
 
 DWORD64 GameAssembly = reinterpret_cast<DWORD64>(GetModuleHandleA("GameAssembly.dll"));
-DWORD64 NoCountdownAddr = GameAssembly + 0xB28CC6;
+DWORD64 NoCountdownAddr = GameAssembly + 0xAB62D6;
 HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetCurrentProcessId());
 unsigned char fiveBytesNOP[] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
 
