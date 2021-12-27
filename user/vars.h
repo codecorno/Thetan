@@ -6,6 +6,7 @@ public:
 	bool noCountdown = false;
 	bool bShowMenu = false;
 	UINT menuKey = VK_INSERT;
+	app::PlayerEntity* localPlayer;
 };
 
 extern Vars vars;

@@ -14,6 +14,7 @@
 #include <D3Dcompiler.h>
 #include <winuser.h>
 
+#include "vars.h"
 #include "main.h"
 #include "dxIndex.h"
 #include "helpers.h"
@@ -21,7 +22,6 @@
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../imgui/imgui_impl_dx11.h"
-#include "vars.h"
 
 #pragma comment (lib, "winmm.lib")
 #pragma comment (lib, "user/detours.lib")
