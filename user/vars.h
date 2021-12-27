@@ -7,6 +7,7 @@ public:
 	bool bShowMenu = false;
 	UINT menuKey = VK_INSERT;
 	app::PlayerEntity* localPlayer;
+	void updateVars();
 };
 
 extern Vars vars;

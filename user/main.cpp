@@ -161,6 +161,8 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 		}
 	}
 
+	vars.updateVars();
+
 	ImGui::CreateContext();
 
 	ImGui_ImplWin32_NewFrame();
