@@ -5,4 +5,8 @@ Vars vars;
 
 void Vars::updateVars() {
 	vars.localPlayer = app::MonoSingleton_1_NewGameController__get_Instance(*app::MonoSingleton_1_NewGameController__get_Instance__MethodInfo)->fields.localPlayer;
+
+	for (int i = 0; i < app::List_1_PlayerEntity__get_Count((app::CharacterView_GetListPlayerEntity(NULL)), NULL); i++) {
+		vars.allPlayers[i] = app::List_1_PlayerEntity__get_Item((app::CharacterView_GetListPlayerEntity(NULL)), i, NULL);
+	}
 }

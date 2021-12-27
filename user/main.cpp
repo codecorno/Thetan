@@ -182,7 +182,7 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 			WriteProcessMemory(hProcess, (LPVOID)fiveBytesNOP, fiveBytesNOP, sizeof(fiveBytesNOP), NULL);		
 		
 		if (ImGui::Button("Hmmmmmmmmmmm")) {
-			List_1_PlayerEntity_* a = CharacterView_GetListPlayerEntity(NULL);
+			auto* a = CharacterView_GetListPlayerEntity(NULL)->fields._items->vector;
 			
 		}
 

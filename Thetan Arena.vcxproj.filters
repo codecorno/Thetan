@@ -40,6 +40,9 @@
     <ClCompile Include="user\vars.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="user\custom.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -106,6 +109,9 @@
       <Filter>framework</Filter>
     </ClInclude>
     <ClInclude Include="user\vars.h">
+      <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="user\custom.h">
       <Filter>user</Filter>
     </ClInclude>
   </ItemGroup>

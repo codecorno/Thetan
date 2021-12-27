@@ -7,6 +7,7 @@ public:
 	bool bShowMenu = false;
 	UINT menuKey = VK_INSERT;
 	app::PlayerEntity* localPlayer;
+	struct app::PlayerEntity* allPlayers[32];
 	void updateVars();
 };
 
