@@ -62,6 +62,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="user\custom.h" />
     <ClInclude Include="user\main.h" />
+    <ClInclude Include="user\memory.h" />
     <ClInclude Include="user\vars.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

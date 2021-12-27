@@ -15,6 +15,7 @@
 #include <winuser.h>
 
 #include "vars.h"
+#include "memory.h"
 #include "main.h"
 #include "dxIndex.h"
 #include "helpers.h"
@@ -30,12 +31,6 @@ using namespace app;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
-
-DWORD64 GameAssembly = reinterpret_cast<DWORD64>(GetModuleHandleA("GameAssembly.dll"));
-DWORD64 NoCountdownAddr = GameAssembly + 0xAB62D6;
-HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetCurrentProcessId());
-unsigned char fiveBytesNOP[] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
-
 
 void Run()
 {
@@ -192,7 +187,7 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 
 		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
 		if (ImGui::Button("No Countdown"))
-			WriteProcessMemory(hProcess, (LPVOID)fiveBytesNOP, fiveBytesNOP, sizeof(fiveBytesNOP), NULL);		
+			WriteProcessMemory(memory.hProcess, (LPVOID)memory.fiveBytesNOP, memory.fiveBytesNOP, sizeof(memory.fiveBytesNOP), NULL);		
 
 		ImGui::Checkbox("Draw Line", &vars.drawLine);
 		ImGui::End();

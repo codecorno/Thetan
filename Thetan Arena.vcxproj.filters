@@ -114,6 +114,9 @@
     <ClInclude Include="user\custom.h">
       <Filter>user</Filter>
     </ClInclude>
+    <ClInclude Include="user\memory.h">
+      <Filter>user</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="appdata">
