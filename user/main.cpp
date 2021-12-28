@@ -13,10 +13,12 @@
 #include <D3D11.h>
 #include <D3Dcompiler.h>
 #include <winuser.h>
+#include <DirectXMath.h>
 
 #include "vars.h"
 #include "memory.h"
 #include "main.h"
+#include "custom.h"
 #include "dxIndex.h"
 #include "helpers.h"
 #include "detours.h"
@@ -40,6 +42,7 @@ void Run()
 	DetourUpdateThread(GetCurrentThread());
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
 	DetourTransactionCommit();
+	AllocConsole();
 
 	while (!bPresentInitialized) {
 		Sleep(100); 
@@ -48,17 +51,20 @@ void Run()
 	Sleep(100);
 }
 
+
 void DrawLines() {
 	if (!vars.drawLine)
 		return;
 
-	auto localPlayerPos = app::PlayerEntity_get_UIPos(vars.localPlayer, NULL);
-	app::Vector3 enemyPos;
-
-	for (int i = 0; i < vars.players.count; i++) {
-		enemyPos = app::PlayerEntity_get_UIPos(vars.players.allPlayers[i], NULL);
-		app::Debug_2_DrawLine_1(localPlayerPos, enemyPos, { 255,255,255,255 }, NULL);
-	};
+	for (int i = 0; i < vars.players.count; i++)
+	{
+		auto enemyPos = Custom::WorldToScreen(vars.players.allPlayers[i]->fields.MyPosition);
+		auto localPlayerPos = Custom::WorldToScreen(vars.localPlayer->fields.MyPosition);
+		
+		app::PlayerEntity_OnInvisibleAlphaUpdate(vars.players.allPlayers[i], 1, NULL);
+		app::PlayerEntity_OnInvisible(vars.players.allPlayers[i], false, NULL);
+		app::PlayerEntity_OnAddExp(vars.localPlayer, 100, NULL);
+	}	
 }
 
 
@@ -169,8 +175,6 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 		}
 	}
 
-	vars.updateVars();
-
 	ImGui::CreateContext();
 
 	ImGui_ImplWin32_NewFrame();
@@ -178,6 +182,7 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 
 	ImGui::NewFrame();
 
+	DrawLines();
 
 	ImGui::GetStyle().AntiAliasedFill = true;
 	ImGui::GetStyle().AntiAliasedLines = true;
@@ -187,9 +192,12 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 
 		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
 		if (ImGui::Button("No Countdown"))
-			WriteProcessMemory(memory.hProcess, (LPVOID)memory.fiveBytesNOP, memory.fiveBytesNOP, sizeof(memory.fiveBytesNOP), NULL);		
+			WriteProcessMemory(memory.hProcess, (LPVOID)memory.NoCountdownAddr, memory.fiveBytesNOP, sizeof(memory.fiveBytesNOP), NULL);		
 
 		ImGui::Checkbox("Draw Line", &vars.drawLine);
+		if (ImGui::Button("Start")) {
+			vars.updateVars();
+		}
 		ImGui::End();
 	}
 	ImGui::EndFrame();
