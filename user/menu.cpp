@@ -2,6 +2,7 @@
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../imgui/imgui_impl_dx11.h"
+#include "../imgui/imgui_internal.h"
 #include "vars.h"
 #include "memory.h"
 #include "menu.h"
@@ -29,21 +30,16 @@ void Menu::Setup(){
 	}
 	ImGui::EndFrame();
 	ImGui::Render();
-
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
 void Menu::Main() {
 
-	if (vars.noCountdown)
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 
+	ImGui::BeginDisabled(vars.noCountdown);
 	if (ImGui::Button("No Countdown"))
 		functions.NoCountdown();
 
-	if (vars.noCountdown)
-		ImGui::PopStyleVar();
-
+	ImGui::EndDisabled();
 	ImGui::Checkbox("Always Visible", &vars.alwaysVisible);
 	ImGui::Checkbox("Full EXP", &vars.fullEXP);
 	ImGui::Checkbox("Draw Line", &vars.drawLine);

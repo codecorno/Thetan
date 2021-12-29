@@ -23,6 +23,7 @@
 #include "dxIndex.h"
 #include "helpers.h"
 #include "detours.h"
+#include "functions.h"
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../imgui/imgui_impl_dx11.h"
@@ -161,10 +162,11 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 			return fnIDXGISwapChainPresent(_chain, syncInterval, flags);
 		}
 	}
-
+	functions.Setup();
 	menu.Setup();
 	
 	pDeviceContext->OMSetRenderTargets(1, &pTargetRT, nullptr);
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	return fnIDXGISwapChainPresent(_chain, syncInterval, flags);
 }
 

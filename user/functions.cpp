@@ -1,5 +1,6 @@
 #include "pch-il2cpp.h"
 #include "vars.h"
+#include "custom.h"
 #include "functions.h"
 #include "memory.h"
 
@@ -15,6 +16,9 @@ void Functions::FullEXP() {
 }
 
 void Functions::Setup() {
+
+	if (vars.gameState != app::GameState__Enum::PLAYING)
+		return;
 
 	if (vars.fullEXP)
 		this->FullEXP();

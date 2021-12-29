@@ -10,6 +10,7 @@ public:
 	bool fullEXP = false;
 
 	UINT menuKey = VK_INSERT;
+	app::GameState__Enum gameState;
 	app::PlayerEntity* localPlayer;
 
 	struct Players {
