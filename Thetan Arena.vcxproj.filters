@@ -43,6 +43,15 @@
     <ClCompile Include="user\custom.cpp">
       <Filter>user</Filter>
     </ClCompile>
+    <ClCompile Include="user\menu.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
+    <ClCompile Include="user\functions.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
+    <ClCompile Include="user\memory.cpp">
+      <Filter>user</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="user\main.h">
@@ -115,6 +124,12 @@
       <Filter>user</Filter>
     </ClInclude>
     <ClInclude Include="user\memory.h">
+      <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="user\menu.h">
+      <Filter>user</Filter>
+    </ClInclude>
+    <ClInclude Include="user\functions.h">
       <Filter>user</Filter>
     </ClInclude>
   </ItemGroup>

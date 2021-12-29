@@ -6,6 +6,9 @@ public:
 	bool noCountdown = false;
 	bool drawLine = false;
 	bool bShowMenu = false;
+	bool alwaysVisible = false;
+	bool fullEXP = false;
+
 	UINT menuKey = VK_INSERT;
 	app::PlayerEntity* localPlayer;
 

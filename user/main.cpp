@@ -18,6 +18,7 @@
 #include "vars.h"
 #include "memory.h"
 #include "main.h"
+#include "menu.h"
 #include "custom.h"
 #include "dxIndex.h"
 #include "helpers.h"
@@ -52,20 +53,6 @@ void Run()
 }
 
 
-void DrawLines() {
-	if (!vars.drawLine)
-		return;
-
-	for (int i = 0; i < vars.players.count; i++)
-	{
-		auto enemyPos = Custom::WorldToScreen(vars.players.allPlayers[i]->fields.MyPosition);
-		auto localPlayerPos = Custom::WorldToScreen(vars.localPlayer->fields.MyPosition);
-		
-		app::PlayerEntity_OnInvisibleAlphaUpdate(vars.players.allPlayers[i], 1, NULL);
-		app::PlayerEntity_OnInvisible(vars.players.allPlayers[i], false, NULL);
-		app::PlayerEntity_OnAddExp(vars.localPlayer, 100, NULL);
-	}	
-}
 
 
 LRESULT CALLBACK hWndProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
@@ -175,37 +162,9 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 		}
 	}
 
-	ImGui::CreateContext();
-
-	ImGui_ImplWin32_NewFrame();
-	ImGui_ImplDX11_NewFrame();
-
-	ImGui::NewFrame();
-
-	DrawLines();
-
-	ImGui::GetStyle().AntiAliasedFill = true;
-	ImGui::GetStyle().AntiAliasedLines = true;
-
-	if (vars.bShowMenu)
-	{
-
-		ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoCollapse);
-		if (ImGui::Button("No Countdown"))
-			WriteProcessMemory(memory.hProcess, (LPVOID)memory.NoCountdownAddr, memory.fiveBytesNOP, sizeof(memory.fiveBytesNOP), NULL);		
-
-		ImGui::Checkbox("Draw Line", &vars.drawLine);
-		if (ImGui::Button("Start")) {
-			vars.updateVars();
-		}
-		ImGui::End();
-	}
-	ImGui::EndFrame();
-	ImGui::Render();
-
+	menu.Setup();
+	
 	pDeviceContext->OMSetRenderTargets(1, &pTargetRT, nullptr);
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
 	return fnIDXGISwapChainPresent(_chain, syncInterval, flags);
 }
 

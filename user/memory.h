@@ -9,4 +9,4 @@ public:
 	unsigned char fiveBytesNOP[5] = {0x90, 0x90, 0x90, 0x90, 0x90};;
 };
 
-Memory memory;
+extern Memory memory;
