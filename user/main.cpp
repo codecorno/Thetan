@@ -43,20 +43,20 @@ void Run()
 	AllocConsole();
 	FILE* fp;
 	freopen_s(&fp, "CONOUT$", "w", stdout);
-	printf("Console Started");
+	printf("Console Started\n");
     il2cpp_thread_attach(il2cpp_domain_get());
-	printf("SDK Attached");
+	printf("SDK Attached\n");
 	GetSwapChainVTable();
-	printf("SwapChan VTable Initialized");
+	printf("SwapChan VTable Initialized\n");
 	DetourTransactionBegin();
-	printf("Detour Transaction Started");
+	printf("Detour Transaction Started\n");
 	DetourUpdateThread(GetCurrentThread());
 	HOOKFUNC(NewGameController_Update);
 	HOOKFUNC(GameController_OnAddScore);
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
-	printf("Present Loop Started");
+	printf("Present Loop Started\n");
 	DetourTransactionCommit();
-	printf("Detour Commited");
+	printf("Detour Commited\n");
 
 	while (!bPresentInitialized) {
 		Sleep(100); 
