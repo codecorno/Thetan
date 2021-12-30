@@ -5,6 +5,8 @@
 #include <sstream>
 #include "../imgui/imgui.h"
 
+using namespace app;
+
 namespace Custom {
 	app::Vector3 WorldToScreen(app::Vector3 position) noexcept;
 	bool HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName);
@@ -17,6 +19,7 @@ namespace Custom {
 	void RenderRectFilled(const ImVec2& from, const ImVec2& to, uint32_t color, float rounding = 0.0f, uint32_t roundingCornersFlags = ImDrawCornerFlags_All);
 	void dNewGameController_Update(app::NewGameController* __this, MethodInfo* method);
 	void dGameController_OnAddScore(app::GameController__Boxed* __this, app::Frame* f, app::TeamId__Enum teamId, int32_t Score, MethodInfo* method);
+	bool dSkillButton_CanUseSkill(SkillButton__Boxed* __this, MethodInfo* method);
 };
 
 

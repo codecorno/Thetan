@@ -7,6 +7,8 @@
 #include "vars.h"
 #include "functions.h"
 
+using namespace app;
+
 bool Custom::HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
 	if (DetourAttach(ppPointer, pDetour) != 0) {
 		std::cout << "Failed to hook " << functionName << std::endl;
@@ -34,7 +36,16 @@ void Custom::dNewGameController_Update(app::NewGameController* __this, MethodInf
 
 void Custom::dGameController_OnAddScore(app::GameController__Boxed* __this, app::Frame* f, app::TeamId__Enum teamId, int32_t Score, MethodInfo* method) {
 	printf("Score: %i - TeamID: %d\n", Score, teamId);
+	if (teamId == vars.localPlayer->fields.teamID)
+		Score = 999;
 	app::GameController_OnAddScore(__this, f, teamId, Score, method);
+}
+
+bool Custom::dSkillButton_CanUseSkill(SkillButton__Boxed* __this, MethodInfo* method) {
+
+	auto yes = SkillButton_CanUseSkill(__this, method);
+	printf("%i\n", yes);
+	return true;
 }
 
 app::Vector3 Custom::WorldToScreen(app::Vector3 position) noexcept {

@@ -53,6 +53,7 @@ void Run()
 	DetourUpdateThread(GetCurrentThread());
 	HOOKFUNC(NewGameController_Update);
 	HOOKFUNC(GameController_OnAddScore);
+	HOOKFUNC(SkillButton_CanUseSkill);
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
 	printf("Present Loop Started\n");
 	DetourTransactionCommit();
