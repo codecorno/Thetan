@@ -18,7 +18,7 @@ public:
 		struct app::PlayerEntity* allPlayers[32];
 	}players;
 
-	void updateVars();
+	void updateVars(app::NewGameController* newGameController);
 };
 
 extern Vars vars;

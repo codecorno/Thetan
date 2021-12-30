@@ -34,6 +34,7 @@ void Functions::LoopPlayers() {
 	for (int i = 0; i < vars.players.count; i++) {
 		if (vars.alwaysVisible)
 			this->AntiInvisible(vars.players.allPlayers[i]);
+		app::PlayerEntity_set_PositionSpawn(vars.players.allPlayers[i], vars.localPlayer->fields.MyPosition, NULL);
 	}
 }
 

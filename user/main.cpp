@@ -35,16 +35,22 @@ using namespace app;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
+#define UNHOOKFUNC(n) if (!Custom::UnhookFunction(&(PVOID&)n, d ## n, #n)) return;
+#define HOOKFUNC(n) if (!Custom::HookFunction(&(PVOID&)n, Custom::d ## n, #n)) return;
 
 void Run()
 {
+	AllocConsole();
+	FILE* fp;
+	freopen_s(&fp, "CONOUT$", "w", stdout);
     il2cpp_thread_attach(il2cpp_domain_get());
 	GetSwapChainVTable();
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
+	HOOKFUNC(NewGameController_Update);
+	HOOKFUNC(Frame_get_DeltaTime);
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
 	DetourTransactionCommit();
-	AllocConsole();
 
 	while (!bPresentInitialized) {
 		Sleep(100); 
@@ -162,7 +168,6 @@ HRESULT __fastcall onPresent(IDXGISwapChain* _chain, UINT syncInterval, UINT fla
 			return fnIDXGISwapChainPresent(_chain, syncInterval, flags);
 		}
 	}
-	functions.Setup();
 	menu.Setup();
 	
 	pDeviceContext->OMSetRenderTargets(1, &pTargetRT, nullptr);

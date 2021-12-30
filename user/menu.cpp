@@ -43,9 +43,6 @@ void Menu::Main() {
 	ImGui::Checkbox("Always Visible", &vars.alwaysVisible);
 	ImGui::Checkbox("Full EXP", &vars.fullEXP);
 	ImGui::Checkbox("Draw Line", &vars.drawLine);
-	if (ImGui::Button("Start")) {
-		vars.updateVars();
-	}
 }
 
 void Menu::DrawList() {

@@ -3,33 +3,41 @@
 #include <Windows.h>
 #include "../imgui/imgui_internal.h"
 #include "custom.h"
+#include "detours.h"
+#include "vars.h"
+#include "functions.h"
 
-app::ClientState__Enum Custom::GetClientState() noexcept {
-    return app::PhotonNetwork_get_connectionStateDetailed(NULL);
-    /*
-    enum class ClientState__Enum : int32_t {
-    Uninitialized = 0x00000000,
-    PeerCreated = 0x00000001,
-    Queued = 0x00000002,
-    Authenticated = 0x00000003,
-    JoinedLobby = 0x00000004,
-    DisconnectingFromMasterserver = 0x00000005,
-    ConnectingToGameserver = 0x00000006,
-    ConnectedToGameserver = 0x00000007,
-    Joining = 0x00000008,
-    Joined = 0x00000009,
-    Leaving = 0x0000000a,
-    DisconnectingFromGameserver = 0x0000000b,
-    ConnectingToMasterserver = 0x0000000c,
-    QueuedComingFromGameserver = 0x0000000d,
-    Disconnecting = 0x0000000e,
-    Disconnected = 0x0000000f,
-    ConnectedToMaster = 0x00000010,
-    ConnectingToNameServer = 0x00000011,
-    ConnectedToNameServer = 0x00000012,
-    DisconnectingFromNameServer = 0x00000013,
-    Authenticating = 0x00000014,
-};*/
+bool Custom::HookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
+	if (DetourAttach(ppPointer, pDetour) != 0) {
+		std::cout << "Failed to hook " << functionName << std::endl;
+		return false;
+	}
+	std::cout << "Hooked " << functionName << std::endl;
+	return true;
+}
+
+bool Custom::UnhookFunction(PVOID* ppPointer, PVOID pDetour, const char* functionName) {
+	if (DetourDetach(ppPointer, pDetour) != 0) {
+		std::cout << "Failed to unhook " << functionName << std::endl;
+		return false;
+	}
+	std::cout << "Unhooked " << functionName << std::endl;
+	return true;
+}
+
+void Custom::dNewGameController_Update(app::NewGameController* __this, MethodInfo* method) {
+
+	vars.updateVars(__this);
+	functions.Setup();
+	app::NewGameController_Update(__this, method);
+}
+
+app::FP Custom::dFrame_get_DeltaTime(app::Frame* __this, MethodInfo* method) {
+
+	auto original = app::Frame_get_DeltaTime(__this, method);
+	printf("%i", original.RawValue);
+	return original;
+	app::Frame_get_DeltaTime(__this, method);
 }
 
 app::Vector3 Custom::WorldToScreen(app::Vector3 position) noexcept {
@@ -37,7 +45,6 @@ app::Vector3 Custom::WorldToScreen(app::Vector3 position) noexcept {
     auto screenPos = app::Camera_WorldToScreenPoint_1(currentCamera, position, NULL);
     return screenPos;
 }
-
 
 ImFont* m_pFont;
 
