@@ -48,7 +48,7 @@ void Run()
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 	HOOKFUNC(NewGameController_Update);
-	HOOKFUNC(Frame_get_DeltaTime);
+	HOOKFUNC(GameController_OnAddScore);
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
 	DetourTransactionCommit();
 

@@ -32,12 +32,9 @@ void Custom::dNewGameController_Update(app::NewGameController* __this, MethodInf
 	app::NewGameController_Update(__this, method);
 }
 
-app::FP Custom::dFrame_get_DeltaTime(app::Frame* __this, MethodInfo* method) {
-
-	auto original = app::Frame_get_DeltaTime(__this, method);
-	printf("%i", original.RawValue);
-	return original;
-	app::Frame_get_DeltaTime(__this, method);
+void Custom::dGameController_OnAddScore(app::GameController__Boxed* __this, app::Frame* f, app::TeamId__Enum teamId, int32_t Score, MethodInfo* method) {
+	printf("Score: %i - TeamID: %d\n", Score, teamId);
+	app::GameController_OnAddScore(__this, f, teamId, Score, method);
 }
 
 app::Vector3 Custom::WorldToScreen(app::Vector3 position) noexcept {
