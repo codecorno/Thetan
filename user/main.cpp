@@ -33,6 +33,46 @@
 
 using namespace app;
 
+/*
+Funções pra testar depois
+
+Passar isSpecial sempre true se vai usar ult sempre:
+	DO_APP_FUNC(0x0215F920, void, WeaponEntity_OnFireWeapon, (WeaponEntity * __this, bool isSpecial, MethodInfo * method));
+
+Passar dier nunca como localPlayer:
+	DO_APP_FUNC(0x01F60A80, void, NewGameController_OnPlayerDie, (NewGameController * __this, PlayerEntity * killer, PlayerEntity * dier, int32_t quantumTick, MethodInfo * method));
+
+Passar isInvi sempre como false, pra exibir no minimapa mesmo escondido:
+	DO_APP_FUNC(0x0202B0F0, void, PlayerMapMarker_OnInvisible, (PlayerMapMarker * __this, bool isInvi, MethodInfo * method));
+
+Mudar rank para ver se muda tudo:
+	DO_APP_FUNC(0x004B1EF0, void, PlayerScoreUI_SetRank, (PlayerScoreUI * __this, int32_t rank, MethodInfo * method));
+	DO_APP_FUNC(0x02030D20, void, PlayerScoreUIMain_SetRank, (PlayerScoreUIMain * __this, int32_t rank, MethodInfo * method));
+
+Setar estrelas para ver se ganha insta:
+	DO_APP_FUNC(0x004B1EF0, void, PlayerScoreLogicBase_SetTotalStar, (PlayerScoreLogicBase * __this, int32_t inTotalStar, MethodInfo * method));
+	DO_APP_FUNC(0x004B1EF0, void, PlayerScoreLogicBase_SetStar, (PlayerScoreLogicBase * __this, int32_t inStar, MethodInfo * method));
+
+Setar dano torre para ver se ganha insta:
+	DO_APP_FUNC(0x004B1EF0, void, PlayerScoreLogicBase_SetTowerDmgDeal, (PlayerScoreLogicBase * __this, int32_t inTowerDmgDeal, MethodInfo * method));
+	Olhar dessa função pra baixo, tem bastante coisa relacionada a score no game
+
+Olhar funções abaixo dessa, tem coisa relacionada a safezone do battle royale:
+	DO_APP_FUNC(0x02018F70, void, SafezoneMarker_SetCurSafezonePosition, (SafezoneMarker * __this, Vector3 postion, MethodInfo * method));
+
+Tentar selecionar personagem sem perm:
+	DO_APP_FUNC(0x00C52A70, void, CharacterMenu_set_HeroType, (CharacterMenu * __this, HeroType__Enum value, MethodInfo * method));
+
+
+
+Hookar funções com deviceID para permitir login +2 contas por PC - Precisa fazer isso antes de mandar pra BRC, senão nego vai piar
+
+Parei de olhar as funções em:
+	DO_APP_FUNC(0x0055C310, void, AvatarItemView_SetHighlight, (AvatarItemView * __this, bool isHighlight, MethodInfo * method));
+
+*/
+
+
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
 #define UNHOOKFUNC(n) if (!Custom::UnhookFunction(&(PVOID&)n, d ## n, #n)) return;
