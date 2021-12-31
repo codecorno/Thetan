@@ -8,6 +8,7 @@ public:
 	bool bShowMenu = false;
 	bool alwaysVisible = false;
 	bool fullEXP = false;
+	bool dmKillMultiplier = false;
 
 	UINT menuKey = VK_INSERT;
 	app::GameState__Enum gameState;

@@ -35,9 +35,9 @@ void Custom::dNewGameController_Update(app::NewGameController* __this, MethodInf
 }
 
 void Custom::dGameController_OnAddScore(app::GameController__Boxed* __this, app::Frame* f, app::TeamId__Enum teamId, int32_t Score, MethodInfo* method) {
-	printf("Score: %i - TeamID: %d\n", Score, teamId);
-	if (teamId == vars.localPlayer->fields.teamID)
-		Score = 999;
+	if (teamId == vars.localPlayer->fields.teamID && vars.dmKillMultiplier)
+		Score = 40;
+
 	app::GameController_OnAddScore(__this, f, teamId, Score, method);
 }
 
@@ -159,4 +159,17 @@ void Custom::RenderRectFilled(const ImVec2& from, const ImVec2& to, uint32_t col
 	float b = (color) & 0xFF;
 
 	window->DrawList->AddRectFilled(from, to, ImGui::GetColorU32({ r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f }), rounding, roundingCornersFlags);
+}
+
+void Custom::Tooltip(const char* desc)
+{
+	ImGui::TextDisabled("(?)");
+	if (ImGui::IsItemHovered())
+	{
+		ImGui::BeginTooltip();
+		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		ImGui::TextUnformatted(desc);
+		ImGui::PopTextWrapPos();
+		ImGui::EndTooltip();
+	}
 }

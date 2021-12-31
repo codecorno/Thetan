@@ -7,6 +7,7 @@
 #include "memory.h"
 #include "menu.h"
 #include "functions.h"
+#include "custom.h"
 
 Menu menu;
 
@@ -38,11 +39,15 @@ void Menu::Main() {
 	ImGui::BeginDisabled(vars.noCountdown);
 	if (ImGui::Button("No Countdown"))
 		functions.NoCountdown();
-
 	ImGui::EndDisabled();
+	ImGui::SameLine(); Custom::Tooltip("Removes skill cooldown *Cannot be turned off*");
+
 	ImGui::Checkbox("Always Visible", &vars.alwaysVisible);
-	ImGui::Checkbox("Full EXP", &vars.fullEXP);
-	ImGui::Checkbox("Draw Line", &vars.drawLine);
+	ImGui::SameLine(); Custom::Tooltip("Enemies will not be invisible when hiding in tall grass");
+	ImGui::Checkbox("EXP Boost", &vars.fullEXP);
+	ImGui::SameLine(); Custom::Tooltip("Makes you gain EXP above normal");
+	ImGui::Checkbox("DM Kill Multiplier", &vars.dmKillMultiplier);
+	ImGui::SameLine(); Custom::Tooltip("Changes Deathmatch kill multiplier, you instantly win after 45 seconds.");
 }
 
 void Menu::DrawList() {
