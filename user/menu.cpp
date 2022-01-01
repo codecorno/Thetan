@@ -48,8 +48,9 @@ void Menu::Main() {
 	ImGui::SameLine(); Custom::Tooltip("Makes you gain EXP above normal");
 	ImGui::Checkbox("DM Kill Multiplier", &vars.dmKillMultiplier);
 	ImGui::SameLine(); Custom::Tooltip("Changes Deathmatch kill multiplier, you instantly win after 45 seconds.");
+	if (ImGui::Button("Bring Safezone"))
+		SafezoneMarker_SetCurSafezonePosition(vars.safe.__this, vars.localPlayer->fields.MyPosition, NULL);
 }
-
 void Menu::DrawList() {
 
 }

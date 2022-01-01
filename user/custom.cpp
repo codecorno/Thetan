@@ -41,11 +41,17 @@ void Custom::dGameController_OnAddScore(app::GameController__Boxed* __this, app:
 	app::GameController_OnAddScore(__this, f, teamId, Score, method);
 }
 
-bool Custom::dSkillButton_CanUseSkill(SkillButton__Boxed* __this, MethodInfo* method) {
+void Custom::dNewGameController_OnPlayerDie(NewGameController* __this, PlayerEntity* killer, PlayerEntity* dier, int32_t quantumTick, MethodInfo* method) {
+	//if (dier->fields.playerID = vars.localPlayer->fields.playerID)
+	//	dier = killer;
+	//killer = vars.localPlayer;
+	app::NewGameController_OnPlayerDie( __this,  killer, dier, quantumTick, method);
+}
 
-	auto yes = SkillButton_CanUseSkill(__this, method);
-	printf("%i\n", yes);
-	return true;
+void Custom::dSafezoneMarker_Awake(SafezoneMarker* __this, MethodInfo* method) {
+	vars.safe.__this = __this;
+	printf("SafezoneMarker Caught");
+	app::SafezoneMarker_Awake(__this, method);
 }
 
 app::Vector3 Custom::WorldToScreen(app::Vector3 position) noexcept {

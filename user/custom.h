@@ -19,7 +19,8 @@ namespace Custom {
 	void RenderRectFilled(const ImVec2& from, const ImVec2& to, uint32_t color, float rounding = 0.0f, uint32_t roundingCornersFlags = ImDrawCornerFlags_All);
 	void dNewGameController_Update(app::NewGameController* __this, MethodInfo* method);
 	void dGameController_OnAddScore(app::GameController__Boxed* __this, app::Frame* f, app::TeamId__Enum teamId, int32_t Score, MethodInfo* method);
-	bool dSkillButton_CanUseSkill(SkillButton__Boxed* __this, MethodInfo* method);
+	void dNewGameController_OnPlayerDie(NewGameController* __this, PlayerEntity* killer, PlayerEntity* dier, int32_t quantumTick, MethodInfo* method);
+	void dSafezoneMarker_Awake(SafezoneMarker* __this, MethodInfo* method);
 	void Tooltip(const char* desc);
 };
 

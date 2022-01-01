@@ -36,10 +36,7 @@ using namespace app;
 /*
 Funções pra testar depois
 
-Passar isSpecial sempre true se vai usar ult sempre:
-	DO_APP_FUNC(0x0215F920, void, WeaponEntity_OnFireWeapon, (WeaponEntity * __this, bool isSpecial, MethodInfo * method));
-
-Passar dier nunca como localPlayer:
+Passar dier nunca como localPlayer: // Parcial
 	DO_APP_FUNC(0x01F60A80, void, NewGameController_OnPlayerDie, (NewGameController * __this, PlayerEntity * killer, PlayerEntity * dier, int32_t quantumTick, MethodInfo * method));
 
 Passar isInvi sempre como false, pra exibir no minimapa mesmo escondido:
@@ -93,7 +90,8 @@ void Run()
 	DetourUpdateThread(GetCurrentThread());
 	HOOKFUNC(NewGameController_Update);
 	HOOKFUNC(GameController_OnAddScore);
-	HOOKFUNC(SkillButton_CanUseSkill);
+	HOOKFUNC(NewGameController_OnPlayerDie);
+	HOOKFUNC(SafezoneMarker_Awake);
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
 	printf("Present Loop Started\n");
 	DetourTransactionCommit();
