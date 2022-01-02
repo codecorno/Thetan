@@ -32,8 +32,9 @@ void Functions::Setup() {
 void Functions::LoopPlayers() {
 
 	for (int i = 0; i < vars.players.count; i++) {
-		if (vars.alwaysVisible)
-			this->AntiInvisible(vars.players.allPlayers[i]);
+		if (vars.alwaysVisible) {
+			this->AntiInvisible(vars.players.allPlayers[i]);			
+		}
 	}
 }
 

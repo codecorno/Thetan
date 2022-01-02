@@ -10,8 +10,15 @@ void Vars::updateVars(app::NewGameController* newGameController) {
 		return;
 
 	vars.localPlayer = newGameController->fields.localPlayer;
+	this->updatePlayers();
+}
 
+void Vars::updatePlayers() {
 	vars.players.count = app::List_1_PlayerEntity__get_Count((app::CharacterView_GetListPlayerEntity(NULL)), NULL);
+
+	if (vars.players.count < 2)
+		return;
+
 	for (int i = 0; i < vars.players.count; i++) {
 		vars.players.allPlayers[i] = app::List_1_PlayerEntity__get_Item((app::CharacterView_GetListPlayerEntity(NULL)), i, NULL);
 	}

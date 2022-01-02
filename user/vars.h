@@ -20,6 +20,7 @@ public:
 	}players;
 
 	void updateVars(app::NewGameController* newGameController);
+	void updatePlayers();
 };
 
 extern Vars vars;

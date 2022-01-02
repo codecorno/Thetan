@@ -77,9 +77,6 @@ bool InitializePresent(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
 
 void Run()
 {
-	AllocConsole();
-	FILE* fp;
-	freopen_s(&fp, "CONOUT$", "w", stdout);
 	printf("Console Started\n");
     il2cpp_thread_attach(il2cpp_domain_get());
 	printf("SDK Attached\n");
@@ -90,7 +87,7 @@ void Run()
 	DetourUpdateThread(GetCurrentThread());
 	HOOKFUNC(NewGameController_Update);
 	HOOKFUNC(GameController_OnAddScore);
-	HOOKFUNC(NewGameController_OnPlayerDie);
+	HOOKFUNC(TeamSuperStarWinByScoreGameData_GameLogicUpdate);
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
 	printf("Present Loop Started\n");
 	DetourTransactionCommit();

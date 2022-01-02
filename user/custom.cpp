@@ -41,17 +41,15 @@ void Custom::dGameController_OnAddScore(app::GameController__Boxed* __this, app:
 	app::GameController_OnAddScore(__this, f, teamId, Score, method);
 }
 
-void Custom::dNewGameController_OnPlayerDie(NewGameController* __this, PlayerEntity* killer, PlayerEntity* dier, int32_t quantumTick, MethodInfo* method) {
-	//if (dier->fields.playerID = vars.localPlayer->fields.playerID)
-	//	dier = killer;
-	//killer = vars.localPlayer;
-	app::NewGameController_OnPlayerDie( __this,  killer, dier, quantumTick, method);
+void Custom::dTeamSuperStarWinByScoreGameData_GameLogicUpdate(TeamSuperStarWinByScoreGameData* __this, Frame* f, MethodInfo* method){
+	__this->fields.ScoreToWin = 1;
+	app::TeamSuperStarWinByScoreGameData_OnInit(__this, f, method);
 }
 
-app::Vector3 Custom::WorldToScreen(app::Vector3 position) noexcept {
-	printf("Original Pos: %f,%f\n", position.x, position.z);
-    auto currentCamera = app::Camera_get_main(NULL);
-    auto screenPos = app::Camera_WorldToScreenPoint_1(currentCamera, position, NULL);
+app::Vector2 Custom::WorldToScreen(app::Vector3 position) noexcept {
+	printf("Original Pos: %f,%f\n", position.x, position.y);
+    auto currentCamera = app::Camera_get_current(NULL);
+    auto screenPos = app::RectTransformUtility_WorldToScreenPoint(currentCamera, position, NULL);
 	printf("Screen Pos: %f,%f\n", screenPos.x, screenPos.y);
     return screenPos;
 }
@@ -103,16 +101,16 @@ float Custom::RenderText(const std::string& text, const ImVec2& position, float 
 	return y;
 }
 
-void Custom::RenderLine(const ImVec2& from, const ImVec2& to, uint32_t color, float thickness)
+void Custom::RenderLine(ImVec2 from, ImVec2 to, uint32_t color, float thickness)
 {
-	ImGuiWindow* window = ImGui::GetCurrentWindow();
+	auto DrawList = ImGui::GetForegroundDrawList();
 
 	float a = (color >> 24) & 0xff;
 	float r = (color >> 16) & 0xff;
 	float g = (color >> 8) & 0xff;
 	float b = (color) & 0xff;
 
-	window->DrawList->AddLine(from, to, ImGui::GetColorU32({ r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f }), thickness);
+	DrawList->AddLine(from, to, ImGui::GetColorU32({ r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f }), thickness);
 }
 
 void Custom::RenderCircle(const ImVec2& position, float radius, uint32_t color, float thickness, uint32_t segments)
