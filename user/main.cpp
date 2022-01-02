@@ -91,7 +91,6 @@ void Run()
 	HOOKFUNC(NewGameController_Update);
 	HOOKFUNC(GameController_OnAddScore);
 	HOOKFUNC(NewGameController_OnPlayerDie);
-	HOOKFUNC(SafezoneMarker_Awake);
 	DetourAttach(&(LPVOID&)fnIDXGISwapChainPresent, (PBYTE)onPresent);
 	printf("Present Loop Started\n");
 	DetourTransactionCommit();

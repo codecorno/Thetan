@@ -9,10 +9,6 @@ public:
 	bool alwaysVisible = false;
 	bool fullEXP = false;
 	bool dmKillMultiplier = false;
-	struct Safe {
-		app::SafezoneMarker* __this;
-		MethodInfo* method;
-	}safe;
 
 	UINT menuKey = VK_INSERT;
 	app::GameState__Enum gameState;
